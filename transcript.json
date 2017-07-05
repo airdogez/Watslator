@@ -1,0 +1,17 @@
+{
+  "warnings": [
+    "Unknown arguments: continuous."
+  ],
+  "results": [
+    {
+      "alternatives": [
+        {
+          "transcript": "spent my whole life telling everyone the E. ",
+          "confidence": 0.856
+        }
+      ],
+      "final": true
+    }
+  ],
+  "result_index": 0
+}
