@@ -1,15 +1,19 @@
 import json
 import wave
 import pyaudio
-import 
-import asyncio
 from tkinter import *
 from tkinter import ttk
 import tkinter.filedialog as filedialog
 import tkinter.messagebox as messagebox
 from watson_developer_cloud import TextToSpeechV1, SpeechToTextV1, LanguageTranslatorV2
 
+RATE = 44100
+CHANNELS = 2
+FORMAT = pyaudio.paInt16
 CHUNK_SIZE = 1024
+RECORD_SECONDS = 5
+WAVE_OUTPUT_FILENAME = "file.wav"
+
 translator_models = ['es-en', 'en-es']
 translator_voices = ["es-LA_SofiaVoice", "en-US_MichaelVoice"]
 broadbands = ["en-US_BroadbandModel", "es-ES_BroadbandModel"]
@@ -113,10 +117,41 @@ class Application(Frame):
             self.translate_from = broadbands[1]
         return
 
+    def record(self):
+        audio = pyaudio.PyAudio()
+        #Crear stream de microfono
+        stream = audio.open(format=FORMAT, channels=CHANNELS,
+                            rate=RATE, input=True,
+                            frames_per_buffer=CHUNK_SIZE)
+        #Grabar
+        print("Grabando")
+        frames = []
+
+        for i in range(0, int(RATE / CHUNK_SIZE * RECORD_SECONDS)):
+            data = stream.read(CHUNK_SIZE)
+            frames.append(data)
+
+        print("Grabacion terminada")
+
+        #Guardar grabacion
+        waveFile = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
+        waveFile.setnchannels(CHANNELS)
+        waveFile.setsampwidth(audio.get_sample_size(FORMAT))
+        waveFile.setframerate(RATE)
+        waveFile.writeframes(b''.join(frames))
+        waveFile.close()
+        self.input_fname = WAVE_OUTPUT_FILENAME
+        return
+
     def createWidgets(self):
 
         button_frame = Frame(self)
         button_frame.pack(expand=True, fill=X)
+
+        self.recordButton = Button(button_frame)
+        self.recordButton["text"] = "Record"
+        self.recordButton["command"] = self.record
+        self.recordButton.grid(row=1, column=0, stick=W + E)
 
         self.inputButton = Button(button_frame)
         self.inputButton["text"] = "Input"

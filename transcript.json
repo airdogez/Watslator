@@ -1,17 +1,17 @@
 {
+  "result_index": 0,
   "warnings": [
     "Unknown arguments: continuous."
   ],
   "results": [
     {
+      "final": true,
       "alternatives": [
         {
-          "transcript": "spent my whole life telling everyone the E. ",
-          "confidence": 0.856
+          "transcript": "hola mundo ",
+          "confidence": 0.999
         }
-      ],
-      "final": true
+      ]
     }
-  ],
-  "result_index": 0
+  ]
 }
